@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACE Event Email</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background-image: url('https://in2it-service.com/ace/banner.png');
+            background-size: cover;
+            background-position: center;
+            padding: 40px 30px;
+            position: relative;
+        }
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        .event-info {
+            background-color: #2d2d2d;
+            color: #ffffff;
+            padding: 30px;
+        }
+        .event-info h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .event-info .date {
+            font-size: 16px;
+            margin: 0 0 20px 0;
+            color: #ffffff;
+        }
+        .event-info p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+        .content-section {
+            padding: 40px 30px;
+        }
+        .two-column {
+            display: table;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .column {
+            display: table-cell;
+            width: 50%;
+            vertical-align: top;
+            padding: 0 10px;
+        }
+        .column img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+        .column h3 {
+            font-size: 16px;
+            margin: 0 0 10px 0;
+            color: #2d2d2d;
+        }
+        .column p {
+            font-size: 13px;
+            line-height: 1.6;
+            color: #666666;
+            margin: 0;
+        }
+        .footer {
+            padding: 20px 30px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #e0e0e0;
+        }
+        .footer-logo {
+            width: 120px;
+            margin-bottom: 10px;
+        }
+        .footer p {
+            font-size: 11px;
+            color: #999999;
+            margin: 5px 0;
+            line-height: 1.5;
+        }
+        @media only screen and (max-width: 600px) {
+            .column {
+                display: block;
+                width: 100% !important;
+                padding: 0 !important;
+                margin-bottom: 20px;
+            }
+            .event-info h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header with Logo and Banner -->
+        <div class="header">
+            <img src="https://in2it-service.com/ace/ace_white_logo.png" alt="ACE Logo" class="logo">
+        </div>
+
+        <!-- Event Information Section -->
+        <div class="event-info">
+            <h1>Ace Solution in Motion 2026</h1>
+            <p class="date">15-17 May 2026, Bangkok W Hotel</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt.</p>
+        </div>
+
+        <!-- Content Section with Two Columns -->
+        <div class="content-section">
+            <div class="two-column">
+                <div class="column">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=500&h=350&fit=crop" alt="Healthcare Professional">
+                    <h3>Lorem ipsum dolor sit amet</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+                <div class="column">
+                    <img src="https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=500&h=350&fit=crop" alt="Medical Team">
+                    <h3>Lorem ipsum dolor sit amet</h3>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <img src="https://in2it-service.com/ace/ace_white_logo.png" alt="DePuy Synthes" class="footer-logo">
+            <p>This email is confidential and for internal use only. Do not forward or distribute.</p>
+        </div>
+    </div>
+</body>
+</html>

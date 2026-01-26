@@ -1,0 +1,448 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import intlTelInput from 'intl-tel-input';
+import 'intl-tel-input/build/css/intlTelInput.css';
+
+const Register = () => {
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    position: '',
+    organization: '',
+    country: 'Thailand',
+    email: '',
+    phone: '',
+    q1: '',
+    q2: '',
+    q3: '',
+    q4: '',
+  });
+
+  const phoneInputRef = useRef(null);
+  const itiRef = useRef(null);
+
+  const countries = [
+    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
+    "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi",
+    "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo, Democratic Republic of the", "Congo, Republic of the", "Costa Rica", "Cote d'Ivoire", "Croatia", "Cuba", "Cyprus", "Czech Republic",
+    "Denmark", "Djibouti", "Dominica", "Dominican Republic",
+    "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia",
+    "Fiji", "Finland", "France",
+    "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+    "Haiti", "Honduras", "Hungary",
+    "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy",
+    "Jamaica", "Japan", "Jordan",
+    "Kazakhstan", "Kenya", "Kiribati", "Kosovo", "Kuwait", "Kyrgyzstan",
+    "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg",
+    "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar",
+    "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway",
+    "Oman",
+    "Pakistan", "Palau", "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal",
+    "Qatar",
+    "Romania", "Russia", "Rwanda",
+    "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria",
+    "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu",
+    "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay", "Uzbekistan",
+    "Vanuatu", "Vatican City", "Venezuela", "Vietnam",
+    "Yemen",
+    "Zambia", "Zimbabwe"
+  ];
+
+  const q1Options = [
+    "Option 1A",
+    "Option 1B",
+    "Option 1C",
+    "Option 1D"
+  ];
+
+  const q2Options = [
+    "Option 2A",
+    "Option 2B",
+    "Option 2C",
+    "Option 2D"
+  ];
+
+  const q3Options = [
+    "Option 3A",
+    "Option 3B",
+    "Option 3C",
+    "Option 3D"
+  ];
+
+  const q4Options = [
+    "Option 4A",
+    "Option 4B",
+    "Option 4C",
+    "Option 4D"
+  ];
+
+  useEffect(() => {
+    if (phoneInputRef.current && !itiRef.current) {
+      itiRef.current = intlTelInput(phoneInputRef.current, {
+        initialCountry: 'th',
+        separateDialCode: true,
+        preferredCountries: ['th', 'us', 'gb', 'sg', 'my'],
+        utilsScript: 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js',
+      });
+    }
+
+    return () => {
+      if (itiRef.current) {
+        itiRef.current.destroy();
+        itiRef.current = null;
+      }
+    };
+  }, []);
+
+  const generateRefId = () => {
+    const timestamp = Date.now();
+    const random = Math.floor(Math.random() * 1000);
+    const combined = timestamp + random;
+    const numericId = parseInt(combined.toString().slice(-3));
+    const paddedId = String(numericId).padStart(3, '0');
+    return `ACE-${paddedId}`;
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setLoading(true);
+
+    const webhookUrl = 'https://in2it.app.n8n.cloud/webhook/ace';
+    const refId = generateRefId();
+    
+    let fullPhoneNumber = '';
+    if (itiRef.current && phoneInputRef.current) {
+      const phoneValue = phoneInputRef.current.value || formData.phone;
+      console.log('Phone input value:', phoneValue);
+      
+      if (phoneValue) {
+        const selectedCountryData = itiRef.current.getSelectedCountryData();
+        console.log('Selected country:', selectedCountryData);
+        
+        // Remove leading zero if present (common in Thai phone numbers)
+        const cleanPhone = phoneValue.replace(/^0+/, '');
+        fullPhoneNumber = `+${selectedCountryData.dialCode}${cleanPhone}`;
+        console.log('Full phone number:', fullPhoneNumber);
+      }
+    } else if (formData.phone) {
+      fullPhoneNumber = formData.phone;
+    }
+
+    const dataToSubmit = {
+      ...formData,
+      phone: fullPhoneNumber,
+      refId: refId,
+    };
+
+    try {
+      const response = await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dataToSubmit),
+      });
+
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      console.error('Submission Error:', err);
+      setError('Something went wrong. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (isSubmitted) {
+    return (
+      <section id="register" className="py-24 bg-white flex items-center justify-center min-h-screen">
+        <div className="bg-white p-10 rounded-2xl shadow-2xl w-full max-w-2xl text-center mx-4">
+          <div className="flex justify-center items-center w-20 h-20 bg-green-100 rounded-full mx-auto">
+            <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 mt-6">Thank You!</h1>
+          <p className="text-gray-600 mt-2">Your registration has been submitted successfully.</p>
+          <p className="text-gray-500 mt-4 text-sm">A confirmation email is on its way to you.</p>
+          <Link
+            to="/"
+            className="inline-block mt-6 bg-primary-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-primary-700 transition-colors duration-300"
+          >
+            Back to Home
+          </Link>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <div className="min-h-screen py-8 md:py-16 px-4 md:px-6 bg-gray-50">
+      <div className="max-w-3xl mx-auto">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+          {/* Background Image Header */}
+          <div 
+            className="p-8 md:p-12 text-center bg-cover bg-center relative"
+            style={{ backgroundImage: 'url(https://in2it-service.com/ace/bg_regis.png)' }}
+          >
+            <div className="absolute inset-0 bg-black/20"></div>
+            <div className="relative z-10">
+              <h1 className="text-3xl md:text-4xl font-bold text-white mb-2 uppercase tracking-tight">
+                EVENT REGISTRATION
+              </h1>
+              <p className="text-white text-sm md:text-base">
+                FILL OUT THE FORM BELOW TO SECURE YOUR SPOT
+              </p>
+            </div>
+          </div>
+
+          <form onSubmit={handleSubmit} className="p-6 md:p-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                  First Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                  placeholder="John"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                  Last Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                  placeholder="Doe"
+                />
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                Position <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="position"
+                value={formData.position}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                placeholder="e.g., Director of Operations"
+              />
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                Organization <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="organization"
+                value={formData.organization}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                placeholder="Your Organization Name"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                  Country <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm appearance-none"
+                >
+                  {countries.map(c => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                  placeholder="john.doe@example.com"
+                />
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                Phone Number <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                ref={phoneInputRef}
+                name="phone"
+                onChange={(e) => {
+                  setFormData(prev => ({ ...prev, phone: e.target.value }));
+                }}
+                required
+                className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm"
+                placeholder="Enter phone number"
+              />
+            </div>
+
+            <div className="mt-8 pt-8 border-t border-gray-200">
+              <h2 className="text-base font-bold text-gray-800 mb-6 uppercase tracking-wide">Additional Questions</h2>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div>
+                  <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                    Question 1 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="q1"
+                      value={formData.q1}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm appearance-none"
+                    >
+                      <option value="">Please select an option</option>
+                      {q1Options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    </select>
+                    <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                    Question 2 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="q2"
+                      value={formData.q2}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm appearance-none"
+                    >
+                      <option value="">Please select an option</option>
+                      {q2Options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    </select>
+                    <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                    Question 3 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="q3"
+                      value={formData.q3}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm appearance-none"
+                    >
+                      <option value="">Please select an option</option>
+                      {q3Options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    </select>
+                    <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 text-xs font-bold mb-2 uppercase">
+                    Question 4 <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <select
+                      name="q4"
+                      value={formData.q4}
+                      onChange={handleChange}
+                      required
+                      className="w-full px-4 py-3 bg-white border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-sm appearance-none"
+                    >
+                      <option value="">Please select an option</option>
+                      {q4Options.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                    </select>
+                    <svg className="absolute right-4 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">{error}</p>
+              </div>
+            )}
+
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <button
+                type="submit"
+                disabled={loading}
+                className="flex-1 bg-primary-500 text-white px-8 py-3 rounded-lg font-bold uppercase tracking-wide hover:bg-primary-700 transition-all duration-300 disabled:bg-primary-400 disabled:cursor-not-allowed text-sm shadow-lg hover:shadow-xl"
+              >
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin h-5 w-5 mr-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Submitting...
+                  </span>
+                ) : (
+                  'Register Now'
+                )}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Register;
