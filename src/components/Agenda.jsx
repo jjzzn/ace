@@ -2,34 +2,25 @@ import React from 'react';
 
 const Agenda = () => {
   const speakers = [
-    {
+        {
       id: 1,
-      name: 'Dr. Lorem Ipsum',
-      title: 'Lorem Ipsum',
-      description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. ',
-      image: 'https://in2it-service.com/ace/speaker1.png',
+      name: 'Dr. David Liu',
+      title: 'Symposium Chair',
+      image: 'https://eeotixwvwphvcgysajys.supabase.co/storage/v1/object/public/aaphks2026/dr2.png',
     },
     {
       id: 2,
-      name: 'Dr. Lorem Ipsum',
-      title: 'Lorem Ipsum',
-      description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. ',
-      image: 'https://in2it-service.com/ace/speaker2.png',
+      name: 'Dr. Ryan Nunley',
+      title: 'International Faculty',
+      image: 'https://eeotixwvwphvcgysajys.supabase.co/storage/v1/object/public/aaphks2026/dr1.png',
     },
     {
       id: 3,
-      name: 'Dr. Lorem Ipsum',
-      title: 'Lorem Ipsum',
-      description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. ',
-      image: 'https://in2it-service.com/ace/speaker3.png',
+      name: 'Dr. Timothy Alton',
+      title: 'International Faculty',
+      image: 'https://eeotixwvwphvcgysajys.supabase.co/storage/v1/object/public/aaphks2026/dr3.png',
     },
-    {
-      id: 4,
-      name: 'Dr. Lorem Ipsum',
-      title: 'Lorem Ipsum',
-      description: 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. ',
-      image: 'https://in2it-service.com/ace/speaker4.png',
-    },
+   
   ];
 
   return (
@@ -44,7 +35,7 @@ const Agenda = () => {
         </div>
 
         {/* Speakers Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 md:gap-x-8 gap-y-12 md:gap-y-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 md:gap-x-8 gap-y-12 md:gap-y-16 max-w-5xl mx-auto">
           {speakers.map((speaker) => (
             <div key={speaker.id} className="text-center group cursor-pointer">
               {/* Image Container */}

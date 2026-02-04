@@ -6,7 +6,7 @@ const Banner = () => {
     <div 
       className="relative text-white py-16 md:py-20 lg:py-24 px-4 md:px-8 lg:px-12 min-h-[500px] md:min-h-[600px] flex items-center overflow-hidden"
       style={{
-        backgroundImage: 'url(https://in2it-service.com/ace/banner3.png)',
+        backgroundImage: 'url(https://eeotixwvwphvcgysajys.supabase.co/storage/v1/object/public/aaphks2026/banner4.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -17,12 +17,13 @@ const Banner = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           {/* Main Content */}
           <div className="md:col-span-10 lg:col-span-9">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 md:mb-8 leading-[1.1] animate-slide-in-left opacity-0">
-              Ace Solution<br />
-              in Motion 2026
+            <h1 className="text-2xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold mb-6 md:mb-8 animate-slide-in-left opacity-0 space-y-2 md:space-y-3">
+              <div>ACE: Asia Pacific</div>
+              <div>Hip & Knee Symposium 2026</div>
+
             </h1>
             <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 md:mb-10 font-light tracking-wide animate-fade-in opacity-0 delay-200">
-              15-17 May 2026 | Bangkok W Hotel
+              15 - 17 May 2026 | W Hotel | Bangkok , Thailand
             </p>
             <Link
               to="/register"
@@ -47,19 +48,20 @@ const Banner = () => {
         </div>
 
         {/* Logos Section */}
-        <div className="flex justify-between items-center mt-16 md:mt-24 lg:mt-32 pt-8 border-t border-white/20 animate-fade-in opacity-0 delay-500">
+        <div className="flex justify-between items-center mt-8 md:mt-16 lg:mt-16 pt-8 border-t border-white/20 animate-fade-in opacity-0 delay-500">
+    
           <div className="transition-transform duration-300 hover:scale-110">
             <img 
-              src="https://in2it-service.com/ace/ace_white_logo.png" 
-              alt="ACE Logo" 
-              className="h-10 md:h-12 lg:h-14 xl:h-16 w-auto drop-shadow-lg"
-            />
-          </div>
-          <div className="transition-transform duration-300 hover:scale-110">
-            <img 
-              src="https://in2it-service.com/ace/DPS_Logo_WHITE.png" 
+              src="https://eeotixwvwphvcgysajys.supabase.co/storage/v1/object/public/aaphks2026/DPS_Logo_WHITE.png" 
               alt="DePuy Synthes Logo" 
               className="h-8 md:h-10 lg:h-12 xl:h-14 w-auto drop-shadow-lg"
+            />
+          </div>
+                <div className="transition-transform duration-300 hover:scale-110">
+            <img 
+              src="https://eeotixwvwphvcgysajys.supabase.co/storage/v1/object/public/aaphks2026/ace_white_logo.png" 
+              alt="ACE Logo" 
+              className="h-10 md:h-12 lg:h-14 xl:h-16 w-auto drop-shadow-lg"
             />
           </div>
         </div>

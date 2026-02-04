@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [coursesDropdownOpen, setCoursesDropdownOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -17,6 +18,20 @@ const Navbar = () => {
   const isActive = (path) => location.pathname === path;
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  const handleSectionClick = (e, sectionId) => {
+    e.preventDefault();
+    if (location.pathname === '/') {
+      // Already on home page, just scroll
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    } else {
+      // Navigate to home page with hash
+      window.location.href = `/#${sectionId}`;
+    }
+  };
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -32,7 +47,7 @@ const Navbar = () => {
             className="flex items-center group"
           >
             <img 
-              src="https://in2it-service.com/ace/ACE_Logo_FA-03.png" 
+              src="https://eeotixwvwphvcgysajys.supabase.co/storage/v1/object/public/aaphks2026/ACE_Logo_FA-03.png" 
               alt="ACE Logo" 
               className={`transition-all duration-300 ${
                 scrolled ? 'h-10' : 'h-12'
@@ -44,36 +59,44 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-1">
             <a
               href="#about"
-              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group"
+              onClick={(e) => handleSectionClick(e, 'about')}
+              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group cursor-pointer"
             >
               About
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full"></span>
             </a>
             <a
               href="#schedule"
-              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group"
+              onClick={(e) => handleSectionClick(e, 'schedule')}
+              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group cursor-pointer"
             >
               Schedule
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full"></span>
             </a>
             <a
               href="#agenda"
-              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group"
+              onClick={(e) => handleSectionClick(e, 'agenda')}
+              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group cursor-pointer"
             >
               Speakers
               <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full"></span>
             </a>
-            <Link
-              to="/courses"
-              className={`relative px-4 py-2 font-medium text-sm uppercase tracking-wide transition-all duration-300 group ${
-                isActive('/courses') ? 'text-primary-500' : 'text-gray-700 hover:text-primary-500'
-              }`}
+            <a
+              href="#venue"
+              onClick={(e) => handleSectionClick(e, 'venue')}
+              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group cursor-pointer"
             >
-              Courses
-              <span className={`absolute bottom-0 left-0 h-0.5 bg-primary-500 transition-all duration-300 ${
-                isActive('/courses') ? 'w-full' : 'w-0 group-hover:w-full'
-              }`}></span>
-            </Link>
+              Venue
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full"></span>
+            </a>
+            <a
+              href="#faq"
+              onClick={(e) => handleSectionClick(e, 'faq')}
+              className="relative px-4 py-2 text-gray-700 font-medium text-sm uppercase tracking-wide transition-all duration-300 hover:text-primary-500 group cursor-pointer"
+            >
+              Contact Us
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300 group-hover:w-full"></span>
+            </a>
             
             {/* Register Button */}
             <Link
@@ -113,34 +136,40 @@ const Navbar = () => {
             <div className="flex flex-col space-y-3">
               <a
                 href="#about"
-                onClick={closeMobileMenu}
-                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors"
+                onClick={(e) => { handleSectionClick(e, 'about'); closeMobileMenu(); }}
+                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors cursor-pointer"
               >
                 About
               </a>
               <a
                 href="#schedule"
-                onClick={closeMobileMenu}
-                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors"
+                onClick={(e) => { handleSectionClick(e, 'schedule'); closeMobileMenu(); }}
+                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors cursor-pointer"
               >
                 Schedule
               </a>
               <a
                 href="#agenda"
-                onClick={closeMobileMenu}
-                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors"
+                onClick={(e) => { handleSectionClick(e, 'agenda'); closeMobileMenu(); }}
+                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors cursor-pointer"
               >
                 Speakers
               </a>
-              <Link
-                to="/courses"
-                onClick={closeMobileMenu}
-                className={`font-medium text-sm uppercase tracking-wide py-2 transition-colors ${
-                  isActive('/courses') ? 'text-primary-500' : 'text-gray-700 hover:text-primary-500'
-                }`}
+              <a
+                href="#venue"
+                onClick={(e) => { handleSectionClick(e, 'venue'); closeMobileMenu(); }}
+                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors cursor-pointer"
               >
-                Courses
-              </Link>
+                Venue
+              </a>
+              <a
+                href="#faq"
+                onClick={(e) => { handleSectionClick(e, 'faq'); closeMobileMenu(); }}
+                className="text-gray-700 hover:text-primary-500 font-medium text-sm uppercase tracking-wide py-2 transition-colors cursor-pointer"
+              >
+                Contact Us
+              </a>
+            
               <Link
                 to="/register"
                 onClick={closeMobileMenu}
